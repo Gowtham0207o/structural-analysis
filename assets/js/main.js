@@ -116,6 +116,7 @@ $("#run-model").click(function() {
 		var model_data = {};
 		model_data['model'] = variables;
 		model_data['sections'] = inputs_from_sections_table();
+		model_data['structure_type'] =structure_type();
 		//download_object_as_json(model_data, 'Example 2');	
 		var structure_typ = structure_type();
 		if(structure_typ == "unstable"){
@@ -193,14 +194,22 @@ function ajax_call_wcf(model_data){
     url: "../../model-results.php",
     success: function (data) {
         if (data.success) {
+			   if (data.result) {
+				// Display bending moments and reaction forces
+				console.log('Bending Moments:', data.result);
+				// Example: Display the response in an HTML element with the id "output"
+				document.getElementById('o-beam-updates').innerHTML = "Bending Moments: " + data.result;
+			} else {
+				console.log('Invalid response from the server.');
+			}
             model_output = JSON.parse(data.result);
-        }
+        }else{
+			console.log('Invalid response from the success');
+		}
     }
 	
 });
-setTimeout(function() {
-	window.location.href = '../../model-results.php'; // Replace with the desired URL
-}, 500);
+console.log(model_output);
 	return model_output;
 
 }
