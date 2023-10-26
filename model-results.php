@@ -18,6 +18,22 @@ function reaction_calc($data){
                 $total_length = intval($value_after_pipe);
               
             }
+            // $minLocationValue = $total_length; // Initialize with a large number
+
+            // // Iterate through the array
+            // foreach ($data as $support) {
+            //     if(($support['type']==="Point Load") || ($support['type']==="Dt. Load") || ($support['type']==="Moment Load")){
+            //         continue;
+            //     }
+            //     $loc = $support['loc'];
+                
+            //     // Extract numeric values from "loc" property
+            //     $numericLoc = filter_var($loc, FILTER_SANITIZE_NUMBER_INT);
+            
+            //     if (is_numeric($numericLoc) && $numericLoc < $minLocationValue) {
+            //         $minLocationValue = $numericLoc;
+            //     }
+            // }
            
         foreach ($data as $lelement){ // for point load calculation
             if (isset($lelement['type']) && ($lelement['type'] === "Point Load") ) {
@@ -50,8 +66,11 @@ function reaction_calc($data){
                 $load=($integer_after_pipe-$integer_before_pipe)*$load_start;
                 $va=$va+($load*($total_length-$length)/$total_length);
                 $total=$total+$load;
-           }else{
-            $length=(($integer_after_pipe+$integer_before_pipe)/2);
+           }else{ // It is an uvl load
+            $length=(($integer_after_pipe+$integer_before_pipe)/3);
+            if($load_end>$load_start){
+$length = $length+($length-$integer_before_pipe);
+            }
                 $load=($integer_after_pipe-$integer_before_pipe)*(($load_start+$load_end)/2);
                 $va=$va+($load*($total_length-$length)/$total_length);
                 $total=$total+$load;

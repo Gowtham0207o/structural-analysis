@@ -135,10 +135,10 @@ $("#run-model").click(function() {
 		$('#o-beam-updates').fadeIn().delay(3000).fadeOut();
 		console.log(model_data);
 		var model_output = ajax_call_wcf(model_data);
-	
+	console.log(obj_to_string(model_output));
 		ClearCharts();
 		var reactions_output = document.getElementById('reaction-results');
-		reactions_output.innerHTML = obj_to_string(model_output.reactionsOutput);
+		reactions_output.innerHTML = obj_to_string(model_output);
 		var select_length = document.getElementById("select-length");
 		var length_text = select_length.options[select_length.selectedIndex].value;
 		var select_force = document.getElementById("select-force");
@@ -185,7 +185,6 @@ function ajax_call_wcf(model_data){
 	var model_data_json = JSON.stringify(model_data);
 	//var url = "data:text/json;charset=utf-8," + encodeURIComponent(model_data_json);
 	var model_output;
-	console.log(model_data);
 	$.ajax({
     type: 'POST', // Change the request type to POST
     async: false,
@@ -196,13 +195,16 @@ function ajax_call_wcf(model_data){
         if (data.success) {
 			   if (data.result) {
 				// Display bending moments and reaction forces
-				console.log('Bending Moments:', data.result);
+				console.log('Reaction forces:', data.result);
 				// Example: Display the response in an HTML element with the id "output"
-				document.getElementById('o-beam-updates').innerHTML = "Bending Moments: " + data.result;
+				document.getElementById('o-beam-updates').innerHTML = "Reaction forces: " + data.result;
+				var reaction=JSON.stringify(data.result);
 			} else {
 				console.log('Invalid response from the server.');
 			}
-            model_output = JSON.parse(data.result);
+	
+
+            model_output = JSON.parse(reaction);
         }else{
 			console.log('Invalid response from the success');
 		}
