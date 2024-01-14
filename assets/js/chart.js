@@ -146,7 +146,8 @@ function GetAllIndexes(arr, val) {
     return indexes;
 }
 
-function MakeShearChart (data, title) {
+function MakeShearChart (daa, title) {
+  var data = JSON.parse(daa);
   var svgWidth  = document.getElementById("shear-chart").offsetWidth,
       svgHeight = 200,
       margin = { top: 20, right: 75, bottom: 40, left: 75 },
@@ -164,7 +165,7 @@ function MakeShearChart (data, title) {
   var shearSummary = limitSummary(limits, "Shear Load", length_text, force_text);
 
   document.getElementById('shear-limits').innerHTML = shearSummary;
-
+  console.log(limitMax,limitMin);
   var yLimit = Math.max(Math.abs(limitMin), Math.abs(limitMax));
 
   var x = d3.scale.linear().range([0, chartWidth])
@@ -616,13 +617,21 @@ function ClearCharts()
 function FindLimitPoints(data, limitMinY, limitMaxY, decimalPoints)
 {
   if(limitMinY == 0){
+    if (Array.isArray(data)) {
+      console.log("the given data is an array")
     var allPoints = data.filter(function(d){
       if(roundNumber(d.y, decimalPoints) == roundNumber(limitMaxY, decimalPoints))
       { 
         return d; 
       }
     });
-  }else{
+  }
+else{
+  console.log("the given data is not an array");
+}
+}else{
+  if (Array.isArray(data)) {
+    console.log("the given data is an array")
     var allPoints = data.filter(function(d){
       if(roundNumber(d.y, decimalPoints) == roundNumber(limitMaxY, decimalPoints)
         || roundNumber(d.y, decimalPoints) == roundNumber(limitMinY, decimalPoints))
@@ -630,6 +639,9 @@ function FindLimitPoints(data, limitMinY, limitMaxY, decimalPoints)
         return d; 
       }
     });
+  }else{
+    console.log("the given data is not an array");
+  }
   }
     /*if(d.y == limitMaxY)
     { 

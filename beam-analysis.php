@@ -36,9 +36,9 @@ include 'libs/load.php';
                         <div class="col-md-4">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading text-center"><strong>Model Setup</strong></div>
-                                        <div class="panel-body">
+                                    <div class="card card-default">
+                                        <div class="card-heading text-center"><strong>Model Setup</strong></div>
+                                        <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-4 col-sm-3 col-xs-4">
                                                     <input type="btn" name="onoffswitch"
@@ -96,9 +96,9 @@ include 'libs/load.php';
                             </div>
                             <div class="row">
                                 <div class="col-md-12 col-sm-6 col-xs-6">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading text-center"><strong>Support Types</strong></div>
-                                        <div class="panel-body">
+                                    <div class="card card-default">
+                                        <div class="card-heading text-center"><strong>Support Types</strong></div>
+                                        <div class="card-body">
                                             <div class="row text-center">
                                                 <div class="col-md-4">
                                                     <a href="javascript:;"
@@ -123,9 +123,9 @@ include 'libs/load.php';
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-6 col-xs-6">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading text-center"><strong>Applied Loads</strong></div>
-                                        <div class="panel-body">
+                                    <div class="card card-default">
+                                        <div class="card-heading text-center"><strong>Applied Loads</strong></div>
+                                        <div class="card-body">
                                             <div class="row text-center">
                                                 <div class="col-md-4">
                                                     <a href="javascript:;"
@@ -177,7 +177,7 @@ include 'libs/load.php';
                                 </div>
                             </div>
                             <div class="row">
-                                <p id="o-beam-updates" class="text-center"></p>
+                                <h5 id="o-beam-updates" class="text-center"></h5>
                             </div>
                         
                         </div>
@@ -318,7 +318,7 @@ include 'libs/load.php';
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                     <h2 class="modal-title" id="section-modal-label">Section Properties</h2>
                 </div>
                 <div class="modal-body">
@@ -333,22 +333,26 @@ include 'libs/load.php';
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-3">Location:</label>
-                            <div class="col-sm-2">
+                            <div class="row">
+                            <div class="col-sm-3">
                                 <input type="text" class="form-control" name="section-start-location"
                                     id="section-start-location" value="" autocomplete="off">
                             </div>
                             <div class="col-sm-1 text-center">
                                 <label class="control-label">-</label>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-3">
                                 <input type="text" class="form-control" name="section-end-location"
                                     id="section-end-location" value="" autocomplete="off">
                             </div>
+</div>
                         </div>
-                        <div class="row">
+                        <div class="custom">
                             <div class="col-sm-12">
+                                
                                 <div class="form-group">
-                                    <label class="control-label col-sm-3">Modulus of Elasticity (<span
+                                <div class="row">
+                                    <label class="control-label col-sm-4">Modulus of Elasticity (<span
                                             class="section-stress-unit">MPa</span>):</label>
                                     <div class="col-sm-3">
                                         <input type="text" class="form-control" name="modulus-of-elasticity"
@@ -363,6 +367,7 @@ include 'libs/load.php';
                                             <option value="Other">Other</option>
                                         </select>
                                     </div>
+</div>
                                 </div>
                             </div>
                         </div>
@@ -402,23 +407,23 @@ include 'libs/load.php';
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <img src="images/section.png" class="img-responsive">
+                                <img src="image/section.png" class="img-custom">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-3">
+                            <div class="col-sm-5">
                                 <button type="button" class="btn btn-primary" onclick="add_section_to_database()">Add to
                                     Database</button>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-5">
                                 <button type="button" class="btn btn-primary"
-                                    onclick="remove_section_from_database()">Delete from Database</button>
+                                    onclick="remove_section_from_database()">select from database</button>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" id="add-section" class="btn btn-primary" onclick="add_beam_section()">Add
                         Section</button>
                     <!--<button type="button" id="add-section" class="btn btn-primary" onclick="update_beam_properties()">Save changes</button>-->
@@ -433,7 +438,7 @@ include 'libs/load.php';
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Save Model</h4>
                 </div>
                 <div class="modal-body">
@@ -441,8 +446,8 @@ include 'libs/load.php';
                     <input type="text" class="form-control" name="area" id="model-name-save" value ="" data-modalfocus>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" id="save-model" class="btn btn-primary" onclick="save_model('model-name-save')" data-dismiss="modal">Save Model</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="save-model" class="btn btn-primary" onclick="save_model('model-name-save')" data-bs-dismiss="modal">Save Model</button>
                 </div>
             </div>
         </div>
@@ -452,7 +457,7 @@ include 'libs/load.php';
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Save As Model</h4>
                 </div>
                 <div class="modal-body">
@@ -460,8 +465,8 @@ include 'libs/load.php';
                     <input type="text" class="form-control" name="area" id="model-name-save" value ="" data-modalfocus>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" id="saveas-model" class="btn btn-primary" onclick="save_model('model-name-saveas')" data-dismiss="modal">Save Model</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="saveas-model" class="btn btn-primary" onclick="save_model('model-name-saveas')" data-bs-dismiss="modal">Save Model</button>
                 </div>
             </div>
         </div>
@@ -473,7 +478,7 @@ include 'libs/load.php';
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Add Pinned Support</h4>
                 </div>
                 <div class="modal-body text-center">
@@ -490,11 +495,11 @@ include 'libs/load.php';
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button id="add-another-pinned-support" type="button" class="btn btn-primary"
                         onclick="add_support('pinned')">Add Another</button>
                     <button id="add-pinned-support" type="button" class="btn btn-primary"
-                        onclick="add_support('pinned')" data-dismiss="modal">Add</button>
+                        onclick="add_support('pinned')" data-bs-dismiss="modal">Add</button>
                 </div>
                 <p class="text-center support-modal-error"></p>
             </div>
@@ -507,7 +512,7 @@ include 'libs/load.php';
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Add Roller Support</h4>
                 </div>
                 <div class="modal-body text-center">
@@ -524,11 +529,11 @@ include 'libs/load.php';
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button id="add-another-roller-support" type="button" class="btn btn-primary"
                         onclick="add_support('roller')">Add Another</button>
                     <button id="add-roller-support" type="button" class="btn btn-primary"
-                        onclick="add_support('roller')" data-dismiss="modal">Add</button>
+                        onclick="add_support('roller')" data-bs-dismiss="modal">Add</button>
                 </div>
                 <p class="text-center support-modal-error"></p>
             </div>
@@ -541,7 +546,7 @@ include 'libs/load.php';
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Add Fixed Support</h4>
                 </div>
                 <div class="modal-body text-center">
@@ -556,11 +561,11 @@ include 'libs/load.php';
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button id="add-another-fixed-support" type="button" class="btn btn-primary"
                         onclick="add_support('fixed')">Add Another</button>
                     <button id="add-fixed-support" type="button" class="btn btn-primary" onclick="add_support('fixed')"
-                        data-dismiss="modal">Add</button>
+                        data-bs-dismiss="modal">Add</button>
                 </div>
                 <p class="text-center support-modal-error"></p>
             </div>
@@ -572,7 +577,7 @@ include 'libs/load.php';
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Add Point Load</h4>
                 </div>
                 <div class="modal-body">
@@ -596,11 +601,11 @@ include 'libs/load.php';
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button id="add-another-point-load" type="button" class="btn btn-primary"
                         onclick="add_point_load()">Add Another</button>
                     <button id="add-point-load" type="button" class="btn btn-primary" onclick="add_point_load()"
-                        data-dismiss="modal">Add</button>
+                        data-bs-dismiss="modal">Add</button>
                 </div>
                 <p class="text-center load-modal-error"></p>
             </div>
@@ -612,7 +617,7 @@ include 'libs/load.php';
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Add Distributed Load</h4>
                 </div>
                 <div class="modal-body">
@@ -652,11 +657,11 @@ include 'libs/load.php';
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button id="add-another-distributed-load" type="button" class="btn btn-primary"
                         onclick="add_distributed_load()">Add Another</button>
                     <button id="add-distributed-load" type="button" class="btn btn-primary"
-                        onclick="add_distributed_load()" data-dismiss="modal">Add</button>
+                        onclick="add_distributed_load()" data-bs-dismiss="modal">Add</button>
                 </div>
                 <p class="text-center load-modal-error"></p>
             </div>
@@ -668,7 +673,7 @@ include 'libs/load.php';
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Add Moment Load</h4>
                 </div>
                 <div class="modal-body">
@@ -692,11 +697,11 @@ include 'libs/load.php';
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button id="add-another-moment-load" type="button" class="btn btn-primary"
                         onclick="add_moment_load()">Add Another</button>
                     <button id="add-moment-load" type="button" class="btn btn-primary" onclick="add_moment_load()"
-                        data-dismiss="modal">Add</button>
+                        data-bs-dismiss="modal">Add</button>
                 </div>
                 <p class="text-center load-modal-error"></p>
             </div>
@@ -708,7 +713,7 @@ include 'libs/load.php';
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                     <h4 id="manager-model-title" class="modal-title">Open Model</h4>
                 </div>
                 <div class="modal-body">
@@ -724,9 +729,9 @@ include 'libs/load.php';
                     <p id="file-manager-updates" class="text-center"></p>
                     <button type="button" id="folder-button" class="btn btn-default pull-left"
                         onclick="create_folder()"><span class="glyphicon glyphicon-plus-sign"></span> Folder</button>
-                    <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+                    <!--<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
                     <!--<button type="button" class="btn btn-danger" onclick="remove_model_from_database()">Delete</button>-->
-                    <button id="manager-action" type="button" class="btn btn-primary" data-dismiss="modal"
+                    <button id="manager-action" type="button" class="btn btn-primary" data-bs-dismiss="modal"
                         onclick="open_saved_model()">Open</button>
                 </div>
             </div>
@@ -738,7 +743,7 @@ include 'libs/load.php';
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Upgrade Account</h4>
                 </div>
                 <div class="modal-body">
@@ -748,7 +753,7 @@ include 'libs/load.php';
                     <a style="margin-left: 20px;" type="button" class="btn btn-primary" href="pricing.html">Upgrade</a>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -759,7 +764,7 @@ include 'libs/load.php';
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                     <h4 class="modal-title">PDF Export</h4>
                 </div>
                 <div class="modal-body">
@@ -793,9 +798,9 @@ include 'libs/load.php';
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button id="add-moment-load" type="button" class="btn btn-primary" onclick="createPdf()"
-                        data-dismiss="modal">Export</button>
+                        data-bs-dismiss="modal">Export</button>
                 </div>
             </div>
         </div>

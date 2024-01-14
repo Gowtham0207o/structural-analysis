@@ -18,26 +18,39 @@ function reaction_calc($data){
                 $total_length = intval($value_after_pipe);
               
             }
-            // $minLocationValue = $total_length; // Initialize with a large number
+            $minLocationValue = $total_length; // Initialize with a large number
 
-            // // Iterate through the array
-            // foreach ($data as $support) {
-            //     if(($support['type']==="Point Load") || ($support['type']==="Dt. Load") || ($support['type']==="Moment Load")){
-            //         continue;
-            //     }
-            //     $loc = $support['loc'];
-                
-            //     // Extract numeric values from "loc" property
-            //     $numericLoc = filter_var($loc, FILTER_SANITIZE_NUMBER_INT);
-            
-            //     if (is_numeric($numericLoc) && $numericLoc < $minLocationValue) {
-            //         $minLocationValue = $numericLoc;
-            //     }
-            // }
+            // Iterate through the array
+            foreach ($data as $support) {
+               if( isset($support['type'])){
            
+                if(($support['type']==="Point Load") || ($support['type']==="Dt. Load") || ($support['type']==="Moment Load")){
+                    print("it is excecuted");
+                    continue;
+                }
+                $loc = $support['loc'];
+                
+                // Extract numeric values from "loc" property
+                $numericLoc = filter_var($loc, FILTER_SANITIZE_NUMBER_INT);
+            
+                if (is_numeric($numericLoc) && $numericLoc < $minLocationValue) {
+                    $minLocationValue = $numericLoc;
+                }
+                
+            }
+        }
+        if($minLocationValue == $total_length){
+            $minLocationValue=0;
+        }
+        
         foreach ($data as $lelement){ // for point load calculation
             if (isset($lelement['type']) && ($lelement['type'] === "Point Load") ) {
-                $va=$va+($lelement['load']*($total_length-$lelement['loc'])/$total_length);
+                $w=$lelement['load'];
+                $l=$total_length-$minLocationValue;
+                $a=$lelement['loc']-$minLocationValue;
+
+            
+                $va=$va+($w*($l-$a)/$l);
                 $total=$total+$lelement['load'];
             }
         }
@@ -64,6 +77,7 @@ function reaction_calc($data){
             
             $length=(($integer_after_pipe+$integer_before_pipe)/2);
                 $load=($integer_after_pipe-$integer_before_pipe)*$load_start;
+
                 $va=$va+($load*($total_length-$length)/$total_length);
                 $total=$total+$load;
            }else{ // It is an uvl load
@@ -72,6 +86,7 @@ function reaction_calc($data){
 $length = $length+($length-$integer_before_pipe);
             }
                 $load=($integer_after_pipe-$integer_before_pipe)*(($load_start+$load_end)/2);
+                
                 $va=$va+($load*($total_length-$length)/$total_length);
                 $total=$total+$load;
            }
@@ -79,13 +94,12 @@ $length = $length+($length-$integer_before_pipe);
         }
 
     $vb=$total-$va;
-    $value = ['va = ' => $va, 'vb = ' => $vb, 'H = ' => 0];
+    $value = ['va' => $va, 'vb' => $vb, 'H' => 0];
     
     return $value;
     }
     
 }
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $model_data_json = $_POST['model_data_json'];
@@ -97,14 +111,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $response = array(
         'success' => true,
-        'result' => $reaction,
-        'data' => "[4,5,6,7,8]"
+        'result' => $reaction
     );
 } else {
     $response = array(
         'success' => false,
-        'result' => 'No data received.',
-        'data' => "hello"
+        'result' => 'No data received.'
     );
 }
 

@@ -133,12 +133,12 @@ $("#run-model").click(function() {
 		var	error = "The model defined is";
 		document.getElementById("o-beam-updates").innerHTML = error.concat(structure_typ);
 		$('#o-beam-updates').fadeIn().delay(3000).fadeOut();
-		console.log(model_data);
+	
 		var model_output = ajax_call_wcf(model_data);
-	console.log(obj_to_string(model_output));
+		
 		ClearCharts();
 		var reactions_output = document.getElementById('reaction-results');
-		reactions_output.innerHTML = obj_to_string(model_output);
+		reactions_output.innerHTML = obj_to_string(model_output.result);
 		var select_length = document.getElementById("select-length");
 		var length_text = select_length.options[select_length.selectedIndex].value;
 		var select_force = document.getElementById("select-force");
@@ -147,7 +147,8 @@ $("#run-model").click(function() {
 	    var section_length_text =  section_length_elements[0].innerText;
 	    var section_stress_elements = document.getElementsByClassName("section-stress-unit");
 	    var section_stress_text = section_stress_elements[0].innerText;
-		MakeShearChart(model_output.shearPoints, 'Shear (' + force_text +')');
+
+		MakeShearChart(model_output.data, 'Shear (' + force_text +')');
 		MakeMomentChart(model_output.momentPoints, 'Moment (' + force_text + '-' + length_text + ')');
 		if(model_output.slopePoints.length !== 0){MakeSlopeChart(model_output.slopePoints, 'Slope (Deg)');}
 		if(model_output.deflectionPoints.length !== 0){MakeDeflectionChart(model_output.deflectionPoints, 'Deflection (' + section_length_text +')')};
@@ -179,42 +180,43 @@ function structure_type(){
 	if(unknowns == 3){return type = "determinate";}
 	if(unknowns > 3){return type = "indeterminate";}
 }
+function ajax_call_wcf(model_data) {
+    var model_data_json = JSON.stringify(model_data);
+    var result_and_data = {};
 
-function ajax_call_wcf(model_data){
+    $.ajax({
+        type: 'POST',
+        async: false,
+        dataType: 'json',
+        data: { model_data_json: model_data_json },
+        url: "../../model-results.php",
+        success: function (data) {
+            if (data.success) {
+                if (data.result) {
+                    console.log('Reaction forces:', data.result);
+                    document.getElementById('o-beam-updates').innerHTML = "Reaction forces: " + data.result;
+                    var reaction = JSON.stringify(data.result);
 
-	var model_data_json = JSON.stringify(model_data);
-	//var url = "data:text/json;charset=utf-8," + encodeURIComponent(model_data_json);
-	var model_output;
-	$.ajax({
-    type: 'POST', // Change the request type to POST
-    async: false,
-    dataType: 'json',
-    data: { model_data_json: model_data_json }, // Add the data to be sent in the request
-    url: "../../model-results.php",
-    success: function (data) {
-        if (data.success) {
-			   if (data.result) {
-				// Display bending moments and reaction forces
-				console.log('Reaction forces:', data.result);
-				// Example: Display the response in an HTML element with the id "output"
-				document.getElementById('o-beam-updates').innerHTML = "Reaction forces: " + data.result;
-				var reaction=JSON.stringify(data.result);
-			} else {
-				console.log('Invalid response from the server.');
-			}
-	
+                    // Set the result property in the result_and_data object
+                    result_and_data.result = JSON.parse(reaction);
+                } else {
+                    console.log('Invalid response from the server.');
+                }
 
-            model_output = JSON.parse(reaction);
-        }else{
-			console.log('Invalid response from the success');
-		}
-    }
-	
-});
-console.log(model_output);
-	return model_output;
+                // Check if data.data exists and set it in the result_and_data object
+                if (data.data) {
+                    console.log('Additional data:', data.data);
+                    result_and_data.data = data.data;
+                }
+            } else {
+                console.log('Invalid response from the success');
+            }
+        }
+    });
 
+    return result_and_data;
 }
+
 
 function inputs_from_table(){
 
