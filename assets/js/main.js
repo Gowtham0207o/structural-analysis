@@ -133,7 +133,7 @@ $("#run-model").click(function() {
 		var	error = "The model defined is";
 		document.getElementById("o-beam-updates").innerHTML = error.concat(structure_typ);
 		$('#o-beam-updates').fadeIn().delay(3000).fadeOut();
-	
+		console.log(model_data);
 		var model_output = ajax_call_wcf(model_data);
 		
 		ClearCharts();
@@ -211,7 +211,9 @@ function ajax_call_wcf(model_data) {
             } else {
                 console.log('Invalid response from the success');
             }
+			
         }
+		
     });
 
     return result_and_data;
