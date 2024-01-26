@@ -1,15 +1,23 @@
-<div class="jumbotron pt-3" id="truss">
-          <h1 class="display-4">Structural analysis</h1>
-          <p class="lead">
-            Welcome to the one stop tool for quick and efficient structural
-            calculations.
-          </p>
-          <hr class="my-4" />
-          <p>
-          The Structural Analysis Dashboard is your one-stop solution for ensuring the safety and reliability of your structures. By providing real-time data, analysis tools, and expert recommendations, we empower you to make informed decisions and proactively address any structural issues. Whether you're managing a construction project, assessing an existing structure, or simply interested in structural analysis, this dashboard is your indispensable resource.
-          </p>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-7">
+            <div class="jumbotron pt-3" id="truss">
+                <h1 class="display-3">Foster engineering with our Structural Analysis Software</h1>
+                <p class="lead"> want to get started click the button below !
+                </p>
+                <button class="btn btn-primary btn-lg" onclick="window.location.href='#tools'"> Get started >></button>
+            </div>
         </div>
-        <div class="row">
+        <div class="col-md-5">
+            <div class="image">
+                <img src="https://img.freepik.com/free-vector/architect-work-cartoon-illustration_1284-57382.jpg?w=740&t=st=1706289925~exp=1706290525~hmac=c27c361cc8793e8c5128a94837bf413decd0a3625bff59bce7a588e16047bdd6" alt="" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div class="row" id="tools">
 <div class="card custom-card pb-2" style="width: 18rem;">
   <img src="image/dashboard/beam.png" class="card-img-top" alt="...">
   <div class="card-body">
