@@ -2799,3 +2799,6 @@ function decode_html(html) {
 function check(){
 	console.log("Its working");
 }
+$(function () {
+	$('[data-toggle="tooltip"]').tooltip();
+  });

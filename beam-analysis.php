@@ -22,17 +22,47 @@ include 'libs/load.php';
                         calculations.
                     </p>
                     <hr class="my-4" />
-                    <p>
+                    <p class="pt-4 pb-4 mb-3">
                         The Beam Analysis Dashboard is your comprehensive tool for guaranteeing the safety and stability
-                        of your beams. With access to live data, advanced analysis capabilities, and expert insights, we
+                        of your beams. With access to live data and expert insights, we
                         enable you to make well-informed choices and preemptively tackle any beam-related concerns.
-                        Whether you're overseeing a construction endeavor, evaluating an in-service beam, or exploring
+                        Whether you're overseeing a construction endeavor, or exploring
                         the intricacies of beam analysis, this dashboard stands as your essential reference
                     </p>
                 </div>
-
+                <h1 class="display-4 pt-4 mt-4">Define Your Beam:</h1>
                 <section id="main-interface" class="container model-initial">
                     <div class="row">
+                    <div class="col-md-8">
+                            <div class="row beam-design">
+                                <canvas id="c"></canvas>
+                                <script>
+                                var c = document.querySelector("#c");
+                                var ctx = c.getContext("2d");
+                                c.style.width = '100%';
+                                c.style.height = '100%';
+                                c.width = c.offsetWidth - 30;
+                                c.height = 250;
+                                var design_width = parseFloat(c.width) - 150;
+                                ctx.strokeRect(75, 115, design_width, 20);
+                                </script>
+                            </div>
+                        
+                            <!--<input type="file" id="theFile" style="display:none" accept=".obm" onchange="example()"/>-->
+                            <div class="row">
+                               
+                                <div class="col-md-4" id="spinnerContainer" class="spinner" class="col-md-4"></div>
+                                <div class="col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-4 col-xs-4 col-xs-offset-4">
+                                    <button type="button" id="run-model" class="btn btn-success">Analyse</button>
+                                    <button type="button" class="btn btn-primary pull-right"
+                                        onclick="open_pdf_modal();">Export</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <h5 id="o-beam-updates" class="text-center"></h5>
+                            </div>
+                        
+                        </div>
                         <div class="col-md-4">
                             <div class="row">
                                 <div class="col-md-12">
@@ -95,7 +125,7 @@ include 'libs/load.php';
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12 col-sm-6 col-xs-6">
+                                <div class="col-md-12 col-sm-6 col-xs-6 pt-2 pb-2">
                                     <div class="card card-default">
                                         <div class="card-heading text-center"><strong>Support Types</strong></div>
                                         <div class="card-body">
@@ -122,7 +152,8 @@ include 'libs/load.php';
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12 col-sm-6 col-xs-6">
+                                
+                                <div class="col-md-12 col-sm-6 col-xs-6 pb-2">
                                     <div class="card card-default">
                                         <div class="card-heading text-center"><strong>Applied Loads</strong></div>
                                         <div class="card-body">
@@ -151,36 +182,7 @@ include 'libs/load.php';
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-8">
-                            <div class="row beam-design">
-                                <canvas id="c"></canvas>
-                                <script>
-                                var c = document.querySelector("#c");
-                                var ctx = c.getContext("2d");
-                                c.style.width = '100%';
-                                c.style.height = '100%';
-                                c.width = c.offsetWidth - 30;
-                                c.height = 250;
-                                var design_width = parseFloat(c.width) - 150;
-                                ctx.strokeRect(75, 115, design_width, 20);
-                                </script>
-                            </div>
                         
-                            <!--<input type="file" id="theFile" style="display:none" accept=".obm" onchange="example()"/>-->
-                            <div class="row">
-                               
-                                <div class="col-md-4" id="spinnerContainer" class="spinner" class="col-md-4"></div>
-                                <div class="col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-4 col-xs-4 col-xs-offset-4">
-                                    <button type="button" id="run-model" class="btn btn-success">Analyse</button>
-                                    <button type="button" class="btn btn-primary pull-right"
-                                        onclick="open_pdf_modal();">Export</button>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <h5 id="o-beam-updates" class="text-center"></h5>
-                            </div>
-                        
-                        </div>
                     </div>
                 </section>
 

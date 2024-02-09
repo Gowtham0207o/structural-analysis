@@ -2,13 +2,52 @@
     margin-right: 20px !important; 
     font-size: 20px !important;/* Adjust the margin to increase or decrease spacing */
 }
-.custom_footer{
-    padding-top:100px ;
-}
+
+
+@media (max-width: 1440px){
+    .custom_footer{
+        padding-top:100px ;
+    }
+  }
 .custom-card{
-    margin: 20px!important;
+    margin: 20px;
 }
+@media (min-width: 2000px) {
+    .custom-footer {
+      margin-left: 26.66%!important;
+    }
+    .custom_tool{
+        justify-content: center!important;
+        margin-left: -26.66%;
+    }
+    .custom-card{
+        margin:40px;
+    }
+  }
 /*
 a{
     text-decoration: none !important;
 } */
+.logo{
+   color:#fff;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+.container{
+    max-width: 2000px;
+}
+
+@media (max-width: 760px){
+    .custom_img{
+        display:none ;
+    }
+  }
+  .bs-tooltip-auto[x-placement^=bottom] .arrow::before,
+.bs-tooltip-bottom .arrow::before {
+    border-bottom-color: #f00;
+    /* Red */
+}
+.custom_tool{
+    margin-left: auto;
+    margin-right: auto;
+}

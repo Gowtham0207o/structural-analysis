@@ -1,7 +1,7 @@
-<div class="container col-7 custom_footer border-top pt-4">
+<div class="container  col-md-5 col-lg-6 col-xlg-10 custom_footer border-top pt-4">
     <footer class="pt-4">
       <div class="row">
-        <div class="col-2 offset-0.5">
+        <div class="col-4 offset-0.5">
           <h5>Pages</h5>
           <ul class="nav flex-column">
             <li class="nav-item mb-2">
@@ -23,7 +23,7 @@
           </ul>
         </div>
 
-        <div class="col-5 offset-2">
+        <div class="col-6 offset-2">
           <form>
             <h5>Subscribe to our newsletter</h5>
             <p>Monthly digest of whats new and exciting from us.</p>

@@ -27,7 +27,7 @@ function reaction_calc($data){
             //     }
             //     $loc = $support['loc'];
                 
-            //     // Extract numeric values from "loc" property
+            //     // Extract numeric values from "loc" propertys
             //     $numericLoc = filter_var($loc, FILTER_SANITIZE_NUMBER_INT);
             
             //     if (is_numeric($numericLoc) && $numericLoc < $minLocationValue) {
