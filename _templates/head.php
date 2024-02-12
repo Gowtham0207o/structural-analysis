@@ -5,6 +5,7 @@
   <meta name="author" content="Gowtham" />
   <meta name="generator" content="Hugo 0.88.1" />
   <title>beam analysis</title>
+  <link rel="icon" type="image/x-icon" href="https://static.thenounproject.com/png/2509531-200.png">
 
   <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/dashboard/" />
 
