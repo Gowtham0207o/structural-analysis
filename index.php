@@ -1,8 +1,12 @@
-<?php
+
+<?php 
 include 'libs/load.php';
-
+$result=true;
+if(logincheck::loggedin()){
+  $result=false;
+}
+if(!$result){
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,3 +31,10 @@ include 'libs/load.php';
 </body>
 
 </html>
+<?php
+}
+else{
+
+  header('location:/login.php');
+}
+?>

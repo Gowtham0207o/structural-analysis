@@ -19,7 +19,7 @@ if ($check) {
   </main>
   <?
     } catch(exception $result) {
-      $result="The email is already in use please try again with an another email";
+      // $result="The email is already in use please try again with an another email";
         ?>
 
 
