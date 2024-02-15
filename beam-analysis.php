@@ -253,6 +253,11 @@ include 'libs/load.php';
                             <hr>
                         </div>
                         <div>
+                            <h2>Fixed End moments</h2>
+                            <p id="moment-results"></p>
+                            <hr>
+                        </div>
+                        <div>
                             <h2>Moment Diagram</h2>
                             <div class="row">
                                 <div class="col-md-4">

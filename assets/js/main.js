@@ -139,6 +139,11 @@ $("#run-model").click(function() {
 		ClearCharts();
 		var reactions_output = document.getElementById('reaction-results');
 		reactions_output.innerHTML = obj_to_string(model_output.result);
+		var fem_output = document.getElementById('moment-results');
+		for (var i = 0; i < model_output.data.length; i++) {
+			fem_output.innerHTML +=  obj_to_string(model_output.data[i]);
+		}
+		
 		var select_length = document.getElementById("select-length");
 		var length_text = select_length.options[select_length.selectedIndex].value;
 		var select_force = document.getElementById("select-force");
@@ -175,6 +180,7 @@ function structure_type(){
 			continue;
 		};
 	}
+	console.log(unknowns);
 	var type;
 	if(unknowns <= 2){return type = "unstable";}
 	if(unknowns == 3){return type = "determinate";}

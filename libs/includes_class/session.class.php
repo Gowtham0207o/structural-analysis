@@ -28,7 +28,7 @@ class session
     public static function destroy()
     {
         session_destroy();
-        header('location:/studinfo/login.php');
+        header('location:/login.php');
          print("the session has been destroyed......");
 
     }public static function delete($key)

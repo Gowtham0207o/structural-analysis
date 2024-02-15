@@ -133,7 +133,7 @@ foreach ($spans as $spanIndex => $span) {
 
 }
     
-
+return $results;
 }
 
 
@@ -181,4 +181,5 @@ $hello='
 ';
 $new=json_decode($hello,true);
 $s=moment_calculation($new);
+print_r($s);
 ?>

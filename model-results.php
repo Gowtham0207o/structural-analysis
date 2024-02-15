@@ -210,11 +210,10 @@ function fixedendmoment($length,$load,$end,$start){
     
     
      foreach ($loadsInSpans[$spanIndex] as $loadId => $load) {
-         print($span['start']);
          
          $fixedEndMoment = fixedendmoment($lengthOfspan,$load,$span['end'],$span['start']);
-         $moment[0] += $fixedEndMoment[0];
-         $moment[1] += $fixedEndMoment[1];
+         $moment[0] += round($fixedEndMoment[0],2);
+         $moment[1] += round($fixedEndMoment[1],2);
       
      }
      $results['span'.$spanIndex+1]=$moment;
@@ -229,14 +228,6 @@ function fixedendmoment($length,$load,$end,$start){
 
 
 
-
-
-
-
-
-
-
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $model_data_json = $_POST['model_data_json'];
@@ -245,11 +236,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $model_data = json_decode($model_data_json, true);
 
     $reaction=reaction_calc($model_data['model']);
+    $EndMoment=moment_calculation($model_data['model']);
    
     $response = array(
         'success' => true,
         'result' => $reaction,
-        'data' => "[4,5,6,7,8]"
+        'data' => array($EndMoment)
     );
 } else {
     $response = array(
