@@ -64,5 +64,10 @@
               </a>
             </li>
           </ul>
+          <div class="m-auto signout">
+          <button class="btn btn-dark">Signout</button>
+          </div>
+
         </div>
+
       </nav>

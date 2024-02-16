@@ -9,12 +9,12 @@ $check=true;
 if ($check){
     try{
       $result = user::login($emailId,$password);
-      header('location:/studinfo');
+      header('location:/index.php');
       session::set('is_loggedin',true);
 
 
 }catch(exception $result){
-  $result="please enter the valid credentials , If you're a new user please signup and try again!"
+  $result="please enter the valid credentials , If you're a new user please signup and try again!".$result;
   ?>
   <main class="container">
   <div class="bg-light p-3"  style=margin:-1px;>

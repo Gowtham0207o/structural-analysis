@@ -19,7 +19,7 @@ class user
 
     }
 
-    public static function signup($email, $pass)
+    public static function signup($username,$email, $pass,$phone)
     {
         database::get_connection();
         $options = [
@@ -27,8 +27,8 @@ class user
             'cost' => 12,
         ];
         $pass = password_hash($pass, PASSWORD_BCRYPT, $options);
-        $sql = "INSERT INTO `credentials` (`email`, `password`, `active`, `logintime`)
-        VALUES ('$email', '$pass', NULL, now());";
+        $sql = "INSERT INTO `credentials` (`username`,`email`, `password`,`phone`, `active`, `logintime`)
+        VALUES ('$username','$email', '$pass','$phone', NULL, now());";
         $result = true;                                               //here the database error should be treated with try catch
         if(database::$conn->query($sql) == 1) {
             $result = false;
@@ -43,7 +43,7 @@ class user
     public static function login($user, $pass)
     {
 
-        $quer = "SELECT * FROM `photogram_login` WHERE `email` = '$user'";
+        $quer = "SELECT * FROM `credentials` WHERE `email` = '$user'";
         $conn = database::get_connection();
 
         $result = $conn->query($quer);

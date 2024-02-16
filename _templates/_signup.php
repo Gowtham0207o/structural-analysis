@@ -5,16 +5,18 @@ if (isset($_POST["email_id"]) and isset($_POST["password"])) {
     $email_id = $_POST["email_id"];
  
     $password = $_POST["password"];
+    $username = $_POST["username"];
+    $phone = $_POST["phone"];
     $check = true;
 }
 if ($check) {
     try {
-      $result = user::signup($email_id,$password);
+      $result = user::signup($username,$email_id,$password,$phone);
         ?><main class="container">
     <div class="bg-light p-4"  style=margin:-1px;>
       <h1 style=color:black;>signup success</h1>
       <p class="lead" style=color:black;> now you can signin and enjoy our app please use the below signin</p>
-      <a class="btn btn-lg btn-primary hvr-shrink" href="/studinfo/login.php" role="button">sign in »</a>
+      <a class="btn btn-lg btn-primary hvr-shrink" href="/login.php" role="button">sign in »</a>
     </div>
   </main>
   <?
@@ -38,9 +40,17 @@ if ($check) {
   <form method="POST" action="signup.php">
   <center><img class="mb-5" src="/image/logo.png" alt=""height="200" ></center>
 <h1 class="h3 mb-3 fw-normal" style="color:black;">Signup here</h1>
-    <div class="form-floating">
+<div class="form-floating">
+      <input name="username" type="text" class="form-control" id="floatingInput" placeholder="name" required>
+      <label for="floatingInput">Username</label>
+    </div>    
+<div class="form-floating">
       <input name="email_id" type="email" class="form-control" id="floatingInput" placeholder="name@example.com" required>
       <label for="floatingInput">Email address</label>
+    </div>
+    <div class="form-floating">
+      <input name="phone" type="tel" class="form-control" id="floatingInput" placeholder="phone number" required>
+      <label for="floatingInput">Phone number</label>
     </div>
     <div class="form-floating">
       <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
