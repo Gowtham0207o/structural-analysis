@@ -28,9 +28,11 @@
             <h5>Subscribe to our newsletter</h5>
             <p>Monthly digest of whats new and exciting from us.</p>
             <div class="d-flex w-100 gap-2">
+              <form action="test_login.php" method="POST">
               <label for="newsletter1" class="visually-hidden">Email address</label>
-              <input id="newsletter1" type="text" class="form-control" placeholder="Email address" />
-              <button class="btn btn-primary" type="button">Subscribe</button>
+              <input id="newsletter1" name="email" type="text" class="form-control" placeholder="Email address" />
+              <button class="btn btn-primary" name="news_subscribe" type="submit">Subscribe</button>
+</form>
             </div>
           </form>
         </div>
@@ -59,6 +61,19 @@
       </div>
     </footer>
     </div>
+    <?php
+// Check if the subscribe parameter is set and its value
+if(isset($_GET['subscribe'])) {
+    $subscribeStatus = $_GET['subscribe'];
+    if($subscribeStatus == 'success') {
+        echo '<script>alert("Subscribe successful!");</script>';
+    } elseif($subscribeStatus == 'failed') {
+        echo '<script>alert("Subscribe failed!");</script>';
+    }
+}
+?>
+
+
   <!-- Option 1: Bootstrap Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
