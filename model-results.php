@@ -1,5 +1,7 @@
 <?php
-
+if(isset($_POST['logout'])){
+    session::destroy();
+  }
 function reaction_calc($data){
     $supportCount = 0;
 

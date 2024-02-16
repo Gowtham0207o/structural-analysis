@@ -1,10 +1,6 @@
 <?php
 include 'libs/load.php';
-try{
-user::signup("admin@mail.me","password");
-
-}catch(exception $e){
-    print($e);
-}
-
+if(isset($_POST['logout'])){
+    session::destroy();
+  }
 ?>
