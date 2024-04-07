@@ -40,20 +40,6 @@ class user
         return $result;
 
     }
-    public static function subscribe($id,$username,$email){
-        $query = "INSERT INTO `newsletter` (`id`, `username`, `email`, `time`)
-        VALUES ($id, '$username', '$email', now());";
-        database::get_connection();
-        $result = true;                                               //here the database error should be treated with try catch
-        if(database::$conn->query($sql) == 1) {
-            $result = false;
-        } else {
-            $result = database::$conn->error;
-        }
-
-        database::$conn->close();
-        return $result;
-    }
     public static function login($user, $pass)
     {
 

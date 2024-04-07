@@ -10,7 +10,6 @@ if ($check){
     try{
       $result = user::login($emailId,$password);
       session::set('username',$result['username']);
-      session::set('id',$result['id']);
       header('location:/index.php');
       session::set('is_loggedin',true);
 
@@ -45,14 +44,13 @@ if ($check){
       <!-- add the eye button -->
 
     </div>
-    <div class="row">
-    <div class="checkbox mb-1" style="color:black;">
+
+    <div class="checkbox mb-3" style="color:black;">
       <label>
         <input type="checkbox" value="remember-me"> Remember me &nbsp;&nbsp;&nbsp;
       </label>
       <a href="#">forgetten password?</a>
     </div>
-</div>
     <button class="w-100 btn btn-lg btn-primary hvr-shrink" name="submit"type="submt">Sign in</button>
     <br>
     <br>
