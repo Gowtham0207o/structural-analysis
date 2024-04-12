@@ -80,12 +80,13 @@
     <script type="text/javascript" src="assets/js/lightbox.min.js"></script>
 <script type="text/javascript" src="assets/js/conversion.js"></script>
 <script type="text/javascript" src="assets/js/sectionproperties.js"></script>
+<script src="assets/js/chart.js"></script>
 <script type="text/javascript" src="assets/js/main.js"></script>    
 <script type="text/javascript" src="assets/js/filemanager.js"></script>
     <script type="text/javascript" src="assets/js/pdf.js"></script>
     <script src="https://d3js.org/d3.v3.js"></script>
     <script type="text/javascript" src="assets/js/jspdf.min.js"></script>
     <script type="text/javascript" src="assets/js/jspdf.plugin.autotable.js"></script>
-    <script src="assets/js/chart.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/canvg/dist/browser/canvg.min.js"></script>
     <script src="assets/js/spin.js"></script>

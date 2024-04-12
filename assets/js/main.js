@@ -133,13 +133,14 @@ $("#run-model").click(function() {
 		var	error = "The model defined is";
 		document.getElementById("o-beam-updates").innerHTML = error.concat(structure_typ);
 		$('#o-beam-updates').fadeIn().delay(3000).fadeOut();
-		console.log(model_data);
-		var model_output = ajax_call_wcf(model_data);
 		
+		var model_output = ajax_call_wcf(model_data);
+		console.log(model_output.shearpoints);
 		ClearCharts();
 		var reactions_output = document.getElementById('reaction-results');
 		reactions_output.innerHTML = obj_to_string(model_output.result);
 		var fem_output = document.getElementById('moment-results');
+		
 		for (var i = 0; i < model_output.data.length; i++) {
 			fem_output.innerHTML +=  obj_to_string(model_output.data[i]);
 		}
@@ -152,8 +153,10 @@ $("#run-model").click(function() {
 	    var section_length_text =  section_length_elements[0].innerText;
 	    var section_stress_elements = document.getElementsByClassName("section-stress-unit");
 	    var section_stress_text = section_stress_elements[0].innerText;
-
-		MakeShearChart(model_output.data, 'Shear (' + force_text +')');
+	
+		var result_sheardata = GenerateShearForceData(model_output.result,10);
+		console.log(result_sheardata);
+		MakeShearChart(result_sheardata, 'Shear (' + force_text +')');
 		MakeMomentChart(model_output.momentPoints, 'Moment (' + force_text + '-' + length_text + ')');
 		if(model_output.slopePoints.length !== 0){MakeSlopeChart(model_output.slopePoints, 'Slope (Deg)');}
 		if(model_output.deflectionPoints.length !== 0){MakeDeflectionChart(model_output.deflectionPoints, 'Deflection (' + section_length_text +')')};
@@ -164,6 +167,29 @@ $("#run-model").click(function() {
 	}, 0);
 
 });
+function GenerateShearForceData(reactionData, beamLength) {
+	var va = reactionData["va = "];
+	var vb = reactionData["vb = "];
+	var H = reactionData["H = "];
+  
+	// Initialize an empty array to store shear force data points
+	var shearData = [];
+  
+	// Add the first data point (x=0, y=va)
+	shearData.push({ "x": 0, "y": va });
+  
+	// Calculate and add intermediate data points along the beam
+	for (var x = 1; x <= beamLength; x++) {
+	  var shear = va - (H / beamLength) * x;
+	  shearData.push({ "x": x, "y": shear });
+	}
+  
+	// Add the last data point (x=beamLength, y=vb)
+	shearData.push({ "x": beamLength, "y": vb });
+  
+	return shearData;
+  }
+  
 
 function structure_type(){
 	var supports = supports_from_table();
