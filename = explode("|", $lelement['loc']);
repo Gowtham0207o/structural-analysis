@@ -1,0 +1,77 @@
+[33mcommit 70a9919f28d931e728641bda26f7b3796b9acf05[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: gowtham <Gowtham032@essentials.selfmade.ninja>
+Date:   Fri Feb 16 17:24:46 2024 +0000
+
+    subscribe database created and now its on progress
+
+[33mcommit dafa7971ec8a2d898aefa7f365513d0ec096917d[m
+Author: gowtham <Gowtham032@essentials.selfmade.ninja>
+Date:   Fri Feb 16 15:40:02 2024 +0000
+
+    signout and username displayed in the navbar
+
+[33mcommit a0a4a6591382d59fd9245baa2123b1359019dc77[m
+Author: gowtham <Gowtham032@essentials.selfmade.ninja>
+Date:   Fri Feb 16 08:10:27 2024 +0000
+
+    login and signup attatched
+
+[33mcommit cadb629233fa2b06cbc609eac5759f607685bc3a[m
+Author: gowtham <Gowtham032@essentials.selfmade.ninja>
+Date:   Thu Feb 15 16:37:44 2024 +0000
+
+    Fixed end moment is fixed and displayed in the beam analysis page
+
+[33mcommit d712dc72e166a89c89bc10e7d9db354b4f245e91[m
+Author: gowtham <Gowtham032@essentials.selfmade.ninja>
+Date:   Tue Feb 13 17:31:54 2024 +0000
+
+    database created but not connected
+
+[33mcommit b4bf42348f6a40198650a4953d5c90ede8adfc1f[m
+Author: gowtham <Gowtham032@essentials.selfmade.ninja>
+Date:   Mon Feb 12 17:28:51 2024 +0000
+
+    login page and signup page added with class files
+
+[33mcommit 9fc0ce320f5a5be9f45749c7bd6e15fae0faa41b[m
+Author: gowtham <Gowtham032@essentials.selfmade.ninja>
+Date:   Fri Feb 9 17:08:20 2024 +0000
+
+    responsive completed
+
+[33mcommit 6b198fe7078fb832d44dfddd2ed9b9a651608a31[m
+Author: gowtham <Gowtham032@essentials.selfmade.ninja>
+Date:   Fri Jan 26 18:04:19 2024 +0000
+
+    frontend changed
+
+[33mcommit fe738e8716b6d85a710f24b36572074d09a474e6[m
+Author: gowtham <Gowtham032@essentials.selfmade.ninja>
+Date:   Mon Jan 15 16:54:51 2024 +0000
+
+    the fixed end moments are calculated and some problems in ajax should be fixed
+
+[33mcommit 9505f29e8fbfd8e95975bc3b4462c64dd9de7672[m
+Author: gowtham <Gowtham032@essentials.selfmade.ninja>
+Date:   Sun Jan 14 05:15:49 2024 +0000
+
+    design changes
+
+[33mcommit 2c7077c4440866efb0c6c91cff1625ff045ee9c7[m
+Author: gowtham <Gowtham032@essentials.selfmade.ninja>
+Date:   Thu Oct 26 17:06:57 2023 +0000
+
+    the reaction force is displayed in the frontend
+
+[33mcommit a9f307affce101e953158973232555ba25af0fb6[m
+Author: gowtham <Gowtham032@essentials.selfmade.ninja>
+Date:   Mon Oct 23 16:33:25 2023 +0000
+
+    reaction force for ssb completed
+
+[33mcommit 0a118258e5dee4fd996126c070821b2e27e20a4b[m
+Author: gowtham <Gowtham032@essentials.selfmade.ninja>
+Date:   Sun Oct 22 09:06:58 2023 +0000
+
+    initial commit

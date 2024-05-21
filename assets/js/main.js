@@ -126,10 +126,7 @@ $("#run-model").click(function() {
 			$('#o-beam-updates').fadeIn().delay(3000).fadeOut();
 			
 			return;
-		}/*else if(structure_typ == "indeterminate"){
-			var logged_in = user_logged_in();
-			if(logged_in == 0){upgrade_account_modal(); stopSpinner(); return;}
-		}*/
+		}
 		var	error = "The model defined is";
 		document.getElementById("o-beam-updates").innerHTML = error.concat(structure_typ);
 		$('#o-beam-updates').fadeIn().delay(3000).fadeOut();
@@ -138,8 +135,10 @@ $("#run-model").click(function() {
 		
 		ClearCharts();
 		var reactions_output = document.getElementById('reaction-results');
+		console.log(model_output);
 		reactions_output.innerHTML = obj_to_string(model_output.result);
 		var fem_output = document.getElementById('moment-results');
+
 		for (var i = 0; i < model_output.data.length; i++) {
 			fem_output.innerHTML +=  obj_to_string(model_output.data[i]);
 		}
@@ -153,7 +152,9 @@ $("#run-model").click(function() {
 	    var section_stress_elements = document.getElementsByClassName("section-stress-unit");
 	    var section_stress_text = section_stress_elements[0].innerText;
 
-		MakeShearChart(model_output.data, 'Shear (' + force_text +')');
+		var transformedData = transformShearData(model_output.result);
+console.log(transformedData);
+		MakeShearChart(transformedData, 'Shear (' + force_text +')');
 		MakeMomentChart(model_output.momentPoints, 'Moment (' + force_text + '-' + length_text + ')');
 		if(model_output.slopePoints.length !== 0){MakeSlopeChart(model_output.slopePoints, 'Slope (Deg)');}
 		if(model_output.deflectionPoints.length !== 0){MakeDeflectionChart(model_output.deflectionPoints, 'Deflection (' + section_length_text +')')};
@@ -180,7 +181,6 @@ function structure_type(){
 			continue;
 		};
 	}
-	console.log(unknowns);
 	var type;
 	if(unknowns <= 2){return type = "unstable";}
 	if(unknowns == 3){return type = "determinate";}
@@ -211,21 +211,44 @@ function ajax_call_wcf(model_data) {
 
                 // Check if data.data exists and set it in the result_and_data object
                 if (data.data) {
-                    console.log('Additional data:', data.data);
                     result_and_data.data = data.data;
                 }
             } else {
                 console.log('Invalid response from the success');
             }
 			
-        }
+        } , error: (error) => {
+			console.log(JSON.stringify(error));
+}
 		
     });
 
     return result_and_data;
 }
 
+function transformShearData(inputData) {
+    // No need to parse inputData since it's already an object
+    var shearData = inputData;
 
+    // Initialize an array to store the transformed data
+    var transformedData = [];
+
+    // Iterate over the keys in the shear data object
+    for (var key in shearData) {
+        if (shearData.hasOwnProperty(key)) {
+            // Extract the position (x) and shear force (y) from each key-value pair
+            var position = parseFloat(key.replace(' = ', ''));
+            var shearForce = shearData[key];
+
+            // Push an object representing the data point into the transformedData array
+            transformedData.push({ x: position, y: shearForce });
+        }
+    }
+
+    // Return the transformed data
+    return transformedData;
+}
+  
 function inputs_from_table(){
 
 	var variables = {};

@@ -148,6 +148,7 @@ function GetAllIndexes(arr, val) {
 
 function MakeShearChart (daa, title) {
   var data = JSON.parse(daa);
+  console.log(data);
   var svgWidth  = document.getElementById("shear-chart").offsetWidth,
       svgHeight = 200,
       margin = { top: 20, right: 75, bottom: 40, left: 75 },

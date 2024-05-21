@@ -1409,7 +1409,7 @@ textarea {
 }
 
 .form-control {
-  border: 1px solid #eaeaea;
+  /* border: 1px solid #eaeaea; */
   font-weight: 500;
   outline: none;
   box-shadow: none;
