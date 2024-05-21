@@ -86,6 +86,7 @@ $length = $length+($length-$integer_before_pipe);
     return $value;
     }
 }
+<<<<<<< HEAD
 // Generates the data for the shear force diagram
 function GenerateShearForceData($reactionData, $beamLength) {
     $va = $reactionData["va"];
@@ -116,6 +117,8 @@ function GenerateShearForceData($reactionData, $beamLength) {
     
     return $shearData;
 }
+=======
+>>>>>>> parent of 8d8af64 (shear points generated)
 
 // Fixed end moment calculation
 
@@ -269,12 +272,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $reaction=reaction_calc($model_data['model']);
     $EndMoment=moment_calculation($model_data['model']);
-    $shearpoints=GenerateShearForceData($reaction,10);   
+   
     $response = array(
         'success' => true,
         'result' => $reaction,
-        'data' => array($EndMoment),
-        'shearpoints' => $shearpoints
+        'data' => array($EndMoment)
     );
 } else {
     $response = array(
