@@ -138,7 +138,6 @@ $("#run-model").click(function() {
 		console.log(model_output);
 		reactions_output.innerHTML = obj_to_string(model_output.result);
 		var fem_output = document.getElementById('moment-results');
-
 		for (var i = 0; i < model_output.data.length; i++) {
 			fem_output.innerHTML +=  obj_to_string(model_output.data[i]);
 		}
@@ -152,9 +151,7 @@ $("#run-model").click(function() {
 	    var section_stress_elements = document.getElementsByClassName("section-stress-unit");
 	    var section_stress_text = section_stress_elements[0].innerText;
 
-		var transformedData = transformShearData(model_output.result);
-console.log(transformedData);
-		MakeShearChart(transformedData, 'Shear (' + force_text +')');
+		MakeShearChart(model_output.data, 'Shear (' + force_text +')');
 		MakeMomentChart(model_output.momentPoints, 'Moment (' + force_text + '-' + length_text + ')');
 		if(model_output.slopePoints.length !== 0){MakeSlopeChart(model_output.slopePoints, 'Slope (Deg)');}
 		if(model_output.deflectionPoints.length !== 0){MakeDeflectionChart(model_output.deflectionPoints, 'Deflection (' + section_length_text +')')};
