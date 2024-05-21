@@ -92,20 +92,27 @@ function GenerateShearForceData($reactionData, $beamLength) {
     $vb = $reactionData["vb"];
     $H = $reactionData["H"];
     $shearData = [];
-    
+    print($va);
     $shearData[] = ["x" => 0, "y" => $va];
     
     for ($x = 1; $x <= $beamLength; $x++) {
         $shear = $va - ($H / $beamLength) * $x;
+        if (isset($loadData[$x])) {
+            $shear -= $loadData[$x]; // Decrease shear force by the load at this point
+        }
         $shearData[] = ["x" => $x, "y" => $shear];
     }
     
     for ($x = $beamLength; $x >= 1; $x--) {
         $shear = $vb - ($H / $beamLength) * ($beamLength - $x);
+        if (isset($loadData[$x])) {
+            $shear -= $loadData[$x]; // Decrease shear force by the load at this point
+        }
         $shearData[] = ["x" => $x, "y" => $shear];
     }
     
     $shearData[] = ["x" => $beamLength, "y" => $vb];
+    print_r($shearData);
     
     return $shearData;
 }
@@ -281,44 +288,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 header('Content-Type: application/json');
 
 // Return the response as a JSON object
-echo json_encode($response);
-// $hello='
-//   {  "1": {
-//         "type": "Length",
-//         "loc": "0 | 10",
-//         "load": ""
-//     },
-//     "2": {
-//         "type": "Support-pinned",
-//         "loc": "0",
-//         "load": ""
-//     },
-//     "3": {
-//         "type": "Support-fixed",
-//         "loc": "10",
-//         "load": ""
-//     },
-//     "8": {
-//         "type": "Dt. Load",
-//         "loc": "5 | 10",
-//         "load": "4 | 10"
-//     },
-//     "4": {
-//         "type": "Point Load",
-//         "loc": "5",
-//         "load": "5"
-//     },
-//     "5": {
-//         "loc": "m",
-//         "load": "kN"
-//     }
-// }
-// ';
-//    $new=json_decode($hello,true);
-//    print_r($new);
 
-// $reaction=reaction_calc($new);
+$hello='
+  {  "1": {
+        "type": "Length",
+        "loc": "0 | 10",
+        "load": ""
+    },
+    "2": {
+        "type": "Support-pinned",
+        "loc": "0",
+        "load": ""
+    },
+    "3": {
+        "type": "Support-fixed",
+        "loc": "10",
+        "load": ""
+    },
+    "8": {
+        "type": "Dt. Load",
+        "loc": "5 | 10",
+        "load": "4 | 10"
+    },
+    "4": {
+        "type": "Point Load",
+        "loc": "5",
+        "load": "5"
+    },
+    "5": {
+        "loc": "m",
+        "load": "kN"
+    }
+}
+';
+   $new=json_decode($hello,true);
+ 
 
-// print_r( $reaction);
+$reaction=reaction_calc($new);
+$shearpointss=GenerateShearForceData($reaction,10);
+print_r( $reaction);
 
 ?>
