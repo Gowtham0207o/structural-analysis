@@ -114,9 +114,11 @@ $("#run-model").click(function() {
 		variables[Object.keys(variables).length + 1] = units;
 		var sections = inputs_from_sections_table();
 		var model_data = {};
+		
 		model_data['model'] = variables;
 		model_data['sections'] = inputs_from_sections_table();
 		model_data['structure_type'] =structure_type();
+		console.log(model_data);
 		//download_object_as_json(model_data, 'Example 2');	
 		var structure_typ = structure_type();
 		if(structure_typ == "unstable"){
@@ -130,12 +132,12 @@ $("#run-model").click(function() {
 		var	error = "The model defined is";
 		document.getElementById("o-beam-updates").innerHTML = error.concat(structure_typ);
 		$('#o-beam-updates').fadeIn().delay(3000).fadeOut();
-		console.log(model_data);
-		var model_output = ajax_call_wcf(model_data);
 		
+		var model_output = ajax_call_wcf(model_data);
+		console.log(model_output.shearpoints);
 		ClearCharts();
 		var reactions_output = document.getElementById('reaction-results');
-		console.log(model_output);
+		
 		reactions_output.innerHTML = obj_to_string(model_output.result);
 		var fem_output = document.getElementById('moment-results');
 		for (var i = 0; i < model_output.data.length; i++) {
@@ -150,8 +152,8 @@ $("#run-model").click(function() {
 	    var section_length_text =  section_length_elements[0].innerText;
 	    var section_stress_elements = document.getElementsByClassName("section-stress-unit");
 	    var section_stress_text = section_stress_elements[0].innerText;
-
-		MakeShearChart(model_output.data, 'Shear (' + force_text +')');
+		console.log(model_output.result);
+		MakeShearChart(model_output.result, 'Shear (' + force_text +')');
 		MakeMomentChart(model_output.momentPoints, 'Moment (' + force_text + '-' + length_text + ')');
 		if(model_output.slopePoints.length !== 0){MakeSlopeChart(model_output.slopePoints, 'Slope (Deg)');}
 		if(model_output.deflectionPoints.length !== 0){MakeDeflectionChart(model_output.deflectionPoints, 'Deflection (' + section_length_text +')')};
@@ -196,16 +198,24 @@ function ajax_call_wcf(model_data) {
         success: function (data) {
             if (data.success) {
                 if (data.result) {
-                    console.log('Reaction forces:', data.result);
+                    
                     document.getElementById('o-beam-updates').innerHTML = "Reaction forces: " + data.result;
                     var reaction = JSON.stringify(data.result);
 
                     // Set the result property in the result_and_data object
                     result_and_data.result = JSON.parse(reaction);
+				
                 } else {
                     console.log('Invalid response from the server.');
                 }
-
+				if(data.shearpoints){
+					console.log("content available");
+					var shearpoint = JSON.stringify(data.shearpoints);
+					result_and_data.shearpoints = JSON.parse(shearpoint);
+					console.log(JSON.parse(shearpoint));
+				}else{
+					console.log("shear point doesnt arrived");
+				}
                 // Check if data.data exists and set it in the result_and_data object
                 if (data.data) {
                     result_and_data.data = data.data;

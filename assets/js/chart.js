@@ -154,9 +154,10 @@ function MakeShearChart (daa, title) {
       chartWidth  = svgWidth  - margin.left - margin.right,
       chartHeight = svgHeight - margin.top  - margin.bottom;
 
-  var limitMin = d3.min(data, function (d) { return d.y; });
-  var limitMax = d3.max(data, function (d) { return d.y; });
-  var limits = FindLimitPoints(data, limitMin, limitMax, 5);
+  var limitMin = d3.min(data.span1, function (d) { return d.y; });
+  var limitMax = d3.max(data.span1, function (d) { return d.y; });
+  console.log(limitMax);
+  var limits = FindLimitPoints(data.span1, limitMin, limitMax, 5);
 
   var select_length = document.getElementById("select-length");
   var length_text = select_length.options[select_length.selectedIndex].value;

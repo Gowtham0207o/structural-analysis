@@ -81,7 +81,11 @@ $length = $length+($length-$integer_before_pipe);
         }
 
     $vb=$total-$va;
-    $value = ['va = ' => $va, 'vb = ' => $vb, 'H = ' => 0];
+    $value = [
+        "va =" => $va,
+        "vb =" => $vb,
+        "H =" => 0
+    ];
     
     return $value;
     }
@@ -226,9 +230,149 @@ function fixedendmoment($length,$load,$end,$start){
  
  }
 
+ function calculateShearForce($inputData) {
+    // Initialize an array to store shear force points
+    $shearForcePoints = [];
 
+    // Parse the input JSON data
+    $data = json_decode($inputData, true);
 
+    // Check if input data is valid
+    if (!$data || !is_array($data)) {
+        return $shearForcePoints; // Return empty array if input is invalid
+    }
 
+    // Initialize variables to store support types and locations
+    $supports = [];
+
+    // Iterate through each item in the data
+    foreach ($data as $key => $item) {
+        if (isset($item['type']) && strpos($item['type'], 'Support') !== false) {
+            $supports[] = [
+                'loc' => intval($item['loc']),
+                'type' => $item['type']
+            ];
+        }
+    }
+
+    // Sort supports by location
+    usort($supports, function($a, $b) {
+        return $a['loc'] - $b['loc'];
+    });
+
+    // Calculate shear force points
+    $prevLoc = 0;
+    foreach ($supports as $support) {
+        $loc = $support['loc'];
+        for ($x = $prevLoc; $x <= $loc; $x++) {
+            $shearForcePoints[] = [
+                'x' => $x,
+                'y' => calculateShearAt($x, $data)
+            ];
+        }
+        $prevLoc = $loc + 1; // Move past the current support location
+    }
+
+    // Calculate shear force at the end of the span
+    $lastLoc = $data['1']['loc'];
+    for ($x = $prevLoc; $x <= $lastLoc; $x++) {
+        $shearForcePoints[] = [
+            'x' => $x,
+            'y' => calculateShearAt($x, $data)
+        ];
+    }
+
+    return $shearForcePoints;
+}
+
+function calculateShearAt($x, $data) {
+    // Initialize shear force
+    $shearForce = 0;
+
+    // Iterate through each load to calculate shear force
+    foreach ($data as $key => $item) {
+        switch ($item['type']) {
+            case 'Point Load':
+                if ($item['loc'] == $x) {
+                    $shearForce += intval($item['load']);
+                }
+                break;
+            case 'Dt. Load':
+                $loadLocs = explode(' | ', $item['loc']);
+                $loadVals = explode(' | ', $item['load']);
+                $loadStart = intval($loadVals[0]);
+                $loadEnd = intval($loadVals[1]);
+                $loadStartLoc = intval($loadLocs[0]);
+                $loadEndLoc = intval($loadLocs[1]);
+
+                if ($x >= $loadStartLoc && $x <= $loadEndLoc) {
+                    $length = $loadEndLoc - $loadStartLoc;
+                    $shearForce += $loadStart + (($loadEnd - $loadStart) / $length) * ($x - $loadStartLoc);
+                }
+                break;
+        }
+    }
+
+    return $shearForce;
+}
+
+function modifyArrayAtSupport($v, $inputData, $reaction) {
+    $s=$v;
+    // Find va (Support-pinned) and vb (Support-fixed) locations
+    $va_loc = [null, null];
+    $count = 0;
+
+    foreach ($inputData as $key => $item) {
+        if ($item['type'] == 'Support-pinned' || $item['type'] == 'Support-fixed' || $item['type'] == 'Support-roller') {
+            $va_loc[$count] = intval($item['loc']);
+            $count++;
+        }
+    }
+
+    $va_location = min($va_loc[0], $va_loc[1]);
+    $vb_location = max($va_loc[0], $va_loc[1]);
+    if ($va_location === null || $vb_location === null) {
+        return $s; // If va or vb location not found, return original array
+    }
+
+    $va = isset($reaction["va ="]) ? $reaction["va ="] : 0; // Get va value from reaction (default to 0 if not found)
+    $vb = isset($reaction["vb ="]) ? $reaction["vb ="] : 0; // Get vb value from reaction (default to 0 if not found)
+
+    // Iterate through the original array $s
+    foreach ($s as $key => $item) {
+        $current_x = $item['x'];
+        $current_y = $item['y'];
+
+      
+        if ($current_x == $va_location) {
+            
+            for ($j = $key ; $j < count($s); $j++) {
+              
+                $v[$j]['y'] = $va;
+                
+            }
+            // Subtract the existing y value where va or vb occurs
+            
+        }
+        if ($current_x == $vb_location) {
+            // Adjust subsequent y values by adding va and vb
+            for ($j = $key ; $j < count($s); $j++) {
+                $v[$j]['y'] += $vb;
+                
+            }
+            
+           
+        }
+        if(isset($current_y)){
+            for ($j = $key ; $j < count($s); $j++) {
+            $v[$j]['y'] =  $v[$j]['y'] - $current_y;
+        }
+        }
+        
+    }
+
+    return $v;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -239,11 +383,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $reaction=reaction_calc($model_data['model']);
     $EndMoment=moment_calculation($model_data['model']);
+    $ForcePoints = calculateShearForce($inputData);
+    $shearpoints =modifyArrayAtSupport($ForcePoints,$model_data['model'],$reaction);
    
     $response = array(
         'success' => true,
         'result' => $reaction,
-        'data' => array($EndMoment)
+        'data' => array($EndMoment),
+        'shearpoints' => $shearpoints
     );
 } else {
     $response = array(
@@ -274,15 +421,11 @@ echo json_encode($response);
 //         "loc": "10",
 //         "load": ""
 //     },
-//     "8": {
-//         "type": "Dt. Load",
-//         "loc": "5 | 10",
-//         "load": "4 | 10"
-//     },
+   
 //     "4": {
 //         "type": "Point Load",
 //         "loc": "5",
-//         "load": "5"
+//         "load": "25"
 //     },
 //     "5": {
 //         "loc": "m",
@@ -290,11 +433,17 @@ echo json_encode($response);
 //     }
 // }
 // ';
-//    $new=json_decode($hello,true);
-//    print_r($new);
 
-// $reaction=reaction_calc($new);
+// $reactions = [
+//     "va =" => 12.5,
+//     "vb =" => 12.5,
+//     "H =" => 0
+// ];
 
-// print_r( $reaction);
+// $array_hello = json_decode($hello, true);
+// $ForcePoints = calculateShearForce($hello);
+// $reaction=reaction_calc($array_hello);
+// $shearpoints =modifyArrayAtSupport($ForcePoints,$array_hello,$reaction);
+// print_r(var_dump($shearpoints));
 
 ?>

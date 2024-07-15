@@ -1,146 +1,96 @@
 <?php
-function fixedendmoment($length,$load,$end,$start){
-   $type=$load['type'];
-  if($type=="Dt. Load"){
-    $parts = explode("|", $load['loc']);
-    if (count($parts) > 1) {
-        $value_before_pipe = trim($parts[0]);
-        $value_after = trim($parts[1]);  
-        
-        $integer_before_pipe = intval($value_before_pipe); // the values are taken from the pipe
-        $integer_after_pipe = intval($value_after);
-    }
-    $part = explode("|", $load['load']);
-    if (count($part) > 1) {
-        $value_before_pipe = trim($part[0]);
-        $value_after = trim($part[1]);  
-        
-        $load_start= intval($value_before_pipe);
-        $load_end = intval($value_after);     // the values are taken from the pipe
-    }
-    $flag=$integer_after_pipe-$integer_before_pipe;
+function calculateShearForce($inputData) {
+    // Initialize an array to store shear force points
+    $shearForcePoints = [];
 
-    if(($integer_before_pipe==$start) && ($integer_after_pipe==$end)){
-        $moment = ($load_start * $length**2) / 12;   // calculation of fixed end moment for udl throught the entire span
-        return [-$moment, $moment];
-    }elseif ($start==$integer_before_pipe) {
-        $w = $load_start;
-        $a = $integer_after_pipe;   // for load start at begin and load within the span at the start of the span
-        $l = $length;
-        $formula1 = "((-(w*a^2)/(12*l^2))*((6*l^2) - (8*l*a) + (3*a^2)))";
-        $formula2 = "((w*a^3)/(12*l^2)*((4*l) - (3*a)))";
-        $formula1 = str_replace(['w', 'a', 'l'], [$w, $a, $l], $formula1);
-        $formula2 = str_replace(['w', 'a', 'l'], [$w, $a, $l], $formula2);
-        $result1 = eval("return $formula1;");
-        $result2 = eval("return $formula2;");
-        return [$result1,$result2];
-    }else{
-       print("the value is after the start"); //here we have to change for the exceptional cases formula
-  
+    // Parse the input JSON data
+    $data = json_decode($inputData, true);
+
+    // Check if input data is valid
+    if (!$data || !is_array($data)) {
+        return $shearForcePoints; // Return empty array if input is invalid
     }
 
-  }elseif($type=="Point Load"){
-    if((($start+$end)/2) == $load['loc']){
-        $result=($load['load']*$length)/8;
-        return [-$result,$result];
-    }else{
-        $a=$load['loc']-$start;
-        $b=$end-$load['loc'];
-        $result1=($load['load']*$a*$b**2)/($length**2);
-        $result2=($load['load']*$a*$b**2)/($length**2);
-        return[-$result1,$result2];
-    }
-
-}
-}
-function moment_calculation($data){
+    // Initialize variables to store support types and locations
     $supports = [];
-    $lengths = [];
-    $loads = [];
-    
-    foreach ($data as $id => $element) {
-        if (strpos($element['type'], 'Support') !== false) {
-            $supports[$id] = $element;
-        } elseif ($element['type'] == 'Length') {
-            $lengths[$id] = $element;
-        } else {
-            $loads[$id] = $element;
-        }
-    }
-    
-    // here determining the spans based on supports and lengths
-    $spans = []; // Each element is a span defined by two supports
-    $previousSupport = null;
-    
-    foreach ($supports as $id => $support) {
-        if ($previousSupport !== null) {
-            $spanId = "Span_" . $previousSupport . "_" . $id;
-            $spans[$spanId] = [
-                'start' => $previousSupport,
-                'end' => $id,
-                'length' => $lengths[$id]['loc'],
-                'loads' => $loads,
+
+    // Iterate through each item in the data
+    foreach ($data as $key => $item) {
+        if (isset($item['type']) && strpos($item['type'], 'Support') !== false) {
+            $supports[] = [
+                'loc' => intval($item['loc']),
+                'type' => $item['type']
             ];
         }
-    
-        $previousSupport = $id;
     }
-    $supportPositions = [];
+
+    // Sort supports by location
+    usort($supports, function($a, $b) {
+        return $a['loc'] - $b['loc'];
+    });
+
+    // Calculate shear force points
+    $prevLoc = 0;
     foreach ($supports as $support) {
-        $supportPositions[] = $support['loc'];
+        $loc = $support['loc'];
+        for ($x = $prevLoc; $x <= $loc; $x++) {
+            $shearForcePoints[] = [
+                'x' => $x,
+                'y' => calculateShearAt($x, $data)
+            ];
+        }
+        $prevLoc = $loc + 1; // Move past the current support location
     }
-    
-    // Step 2: Sort Support Positions
-    sort($supportPositions);
-    
-    // Step 3: Determine Spans
-    $spans = [];
-    for ($i = 0; $i < count($supportPositions) - 1; $i++) {
-        $spanStart = $supportPositions[$i];
-        $spanEnd = $supportPositions[$i + 1];
-        $spans[] = ['start' => $spanStart, 'end' => $spanEnd];
+
+    // Calculate shear force at the end of the span
+    $lastLoc = $data['1']['loc'];
+    for ($x = $prevLoc; $x <= $lastLoc; $x++) {
+        $shearForcePoints[] = [
+            'x' => $x,
+            'y' => calculateShearAt($x, $data)
+        ];
     }
-    
-    // Step 4: Assign Loads to Spans
-    $loadsInSpans = [];
-    foreach ($loads as $loadId => $load) {
-        if (isset($load['loc']) && isset($load['type'])) {
-            $loadPosition = floatval($load['loc']);
-            foreach ($spans as $spanIndex => $span) {
-                if ($loadPosition >= $span['start'] && $loadPosition < $span['end']) {
-                    $loadsInSpans[$spanIndex][$loadId] = $load;
-                    break;
+
+    return $shearForcePoints;
+}
+
+
+function calculateShearAt($x, $data) {
+    // Initialize shear force
+    $shearForce = 0;
+
+    // Iterate through each load to calculate shear force
+    foreach ($data as $key => $item) {
+        switch ($item['type']) {
+            case 'Point Load':
+                if ($item['loc'] == $x) {
+                    $shearForce += intval($item['load']);
                 }
-            }
+                break;
+            case 'Dt. Load':
+                $loadLocs = explode(' | ', $item['loc']);
+                $loadVals = explode(' | ', $item['load']);
+                $loadStart = intval($loadVals[0]);
+                $loadEnd = intval($loadVals[1]);
+                $loadStartLoc = intval($loadLocs[0]);
+                $loadEndLoc = intval($loadLocs[1]);
+
+                if ($x >= $loadStartLoc && $x <= $loadEndLoc) {
+                    $length = $loadEndLoc - $loadStartLoc;
+                    $shearForce += $loadStart + (($loadEnd - $loadStart) / $length) * ($x - $loadStartLoc);
+                }
+                break;
         }
     }
-    $results = [];
-    
-foreach ($spans as $spanIndex => $span) {
-    $lengthOfspan=$span['end']-$span['start'];
-    $moment=[];
-   
-   
-    foreach ($loadsInSpans[$spanIndex] as $loadId => $load) {
-        print($span['start']);
-        
-        $fixedEndMoment = fixedendmoment($lengthOfspan,$load,$span['end'],$span['start']);
-        $moment[0] += $fixedEndMoment[0];
-        $moment[1] += $fixedEndMoment[1];
-     
-    }
-    $results[$spanIndex]=$moment;
 
-}
-    
-return $results;
+    return $shearForce;
 }
 
-
-$hello='
-  {  "1": {
+// Example usage:
+$inputData = '{
+    "1": {
         "type": "Length",
-        "loc": "0 | 20",
+        "loc": "0 | 10",
         "load": ""
     },
     "2": {
@@ -153,33 +103,22 @@ $hello='
         "loc": "10",
         "load": ""
     },
-    "7": {
-        "type": "Support-roller",
-        "loc": "20",
-        "load": ""
-    },
-    "8": {
-        "type": "Dt. Load",
-        "loc": "0 | 10",
-        "load": "10 | 10"
-    },
+ 
     "4": {
         "type": "Point Load",
-        "loc": "7",
-        "load": "5"
+        "loc": "5",
+        "load": "25"
     },
-    "6": {
-        "type": "Point Load",
-        "loc": "15",
-        "load": "10"
-    },
-    "5": {
+   
+  
+    "7": {
         "loc": "m",
         "load": "kN"
     }
-}
-';
-$new=json_decode($hello,true);
-$s=moment_calculation($new);
-print_r($s);
-?>
+}';
+
+// Calculate shear force points
+$shearForcePoints = calculateShearForce($inputData);
+
+// Output the result
+echo json_encode($shearForcePoints, JSON_PRETTY_PRINT);

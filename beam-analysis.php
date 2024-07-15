@@ -217,6 +217,7 @@ if(!$result){
                                     </tbody>
                                 </table>
                             </div>
+                            
                             <div class="row">
                                 <table class="table table-bordered table-hover" id="table-section-properties">
                                     <thead>
