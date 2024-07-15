@@ -235,8 +235,8 @@ function fixedendmoment($length,$load,$end,$start){
     $shearForcePoints = [];
 
     // Parse the input JSON data
-    $data = json_decode($inputData, true);
 
+$data =$inputData;
     // Check if input data is valid
     if (!$data || !is_array($data)) {
         return $shearForcePoints; // Return empty array if input is invalid
@@ -383,14 +383,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $reaction=reaction_calc($model_data['model']);
     $EndMoment=moment_calculation($model_data['model']);
-    $ForcePoints = calculateShearForce($inputData);
+    $ForcePoints = calculateShearForce($model_data['model']);
     $shearpoints =modifyArrayAtSupport($ForcePoints,$model_data['model'],$reaction);
    
     $response = array(
         'success' => true,
         'result' => $reaction,
         'data' => array($EndMoment),
-        'shearpoints' => $shearpoints
+        'shearpoints' => array($shearpoints)
     );
 } else {
     $response = array(
@@ -444,6 +444,6 @@ echo json_encode($response);
 // $ForcePoints = calculateShearForce($hello);
 // $reaction=reaction_calc($array_hello);
 // $shearpoints =modifyArrayAtSupport($ForcePoints,$array_hello,$reaction);
-// print_r(var_dump($shearpoints));
+// print_r($shearpoints);
 
 ?>
