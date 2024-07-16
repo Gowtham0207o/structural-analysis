@@ -109,8 +109,12 @@ $inputData = '{
         "loc": "5",
         "load": "25"
     },
-   
-  
+    "5": {
+        "type": "Dt. Load",
+        "loc": "3 | 8",
+        "load": "4 | 4"
+    },
+ 
     "7": {
         "loc": "m",
         "load": "kN"
