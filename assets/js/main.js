@@ -152,8 +152,8 @@ $("#run-model").click(function() {
 	    var section_length_text =  section_length_elements[0].innerText;
 	    var section_stress_elements = document.getElementsByClassName("section-stress-unit");
 	    var section_stress_text = section_stress_elements[0].innerText;
-		console.log(model_output.result);
-		MakeShearChart(model_output.result, 'Shear (' + force_text +')');
+	
+		MakeShearChart(model_output.shearpoints, 'Shear (' + force_text +')');
 		MakeMomentChart(model_output.momentPoints, 'Moment (' + force_text + '-' + length_text + ')');
 		if(model_output.slopePoints.length !== 0){MakeSlopeChart(model_output.slopePoints, 'Slope (Deg)');}
 		if(model_output.deflectionPoints.length !== 0){MakeDeflectionChart(model_output.deflectionPoints, 'Deflection (' + section_length_text +')')};
@@ -209,10 +209,10 @@ function ajax_call_wcf(model_data) {
                     console.log('Invalid response from the server.');
                 }
 				if(data.shearpoints){
-					console.log("content available");
+					
 					var shearpoint = JSON.stringify(data.shearpoints);
 					result_and_data.shearpoints = JSON.parse(shearpoint);
-					console.log(JSON.parse(shearpoint));
+					
 				}else{
 					console.log("shear point doesnt arrived");
 				}

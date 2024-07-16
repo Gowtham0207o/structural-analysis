@@ -147,18 +147,18 @@ function GetAllIndexes(arr, val) {
 }
 
 function MakeShearChart (daa, title) {
-  var data = daa;
+  var data =daa.flat()
   var svgWidth  = document.getElementById("shear-chart").offsetWidth,
       svgHeight = 200,
       margin = { top: 20, right: 75, bottom: 40, left: 75 },
       chartWidth  = svgWidth  - margin.left - margin.right,
       chartHeight = svgHeight - margin.top  - margin.bottom;
 
-  var limitMin = d3.min(data.span1, function (d) { return d.y; });
-  var limitMax = d3.max(data.span1, function (d) { return d.y; });
-  console.log(limitMax);
-  var limits = FindLimitPoints(data.span1, limitMin, limitMax, 5);
-
+  var limitMin = d3.min(data, function (d) { return d.y; });
+  var limitMax = d3.max(data, function (d) { return d.y; });
+  var limits = FindLimitPoints(data, limitMin, limitMax, 5);
+  console.log("data received to shear chart");
+  console.log(data);
   var select_length = document.getElementById("select-length");
   var length_text = select_length.options[select_length.selectedIndex].value;
   var select_force = document.getElementById("select-force");
@@ -166,7 +166,7 @@ function MakeShearChart (daa, title) {
   var shearSummary = limitSummary(limits, "Shear Load", length_text, force_text);
 
   document.getElementById('shear-limits').innerHTML = shearSummary;
-  console.log(limitMax,limitMin);
+
   var yLimit = Math.max(Math.abs(limitMin), Math.abs(limitMax));
 
   var x = d3.scale.linear().range([0, chartWidth])
