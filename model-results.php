@@ -2,6 +2,9 @@
 if(isset($_POST['logout'])){
     session::destroy();
   }
+
+
+  
 function reaction_calc($data){
     $supportCount = 0;
 
@@ -231,15 +234,15 @@ function fixedendmoment($length,$load,$end,$start){
  }
 
  function calculateShearForce($inputData) {
-    // Initialize an array to store shear force points
+   
     $shearForcePoints = [];
 
-    // Parse the input JSON data
+  
 
 $data =$inputData;
-    // Check if input data is valid
+  
     if (!$data || !is_array($data)) {
-        return $shearForcePoints; // Return empty array if input is invalid
+        return $shearForcePoints; 
     }
 
     // Initialize variables to store support types and locations
@@ -298,18 +301,27 @@ function calculateShearAt($x, $data) {
                 }
                 break;
             case 'Dt. Load':
-                $loadLocs = explode(' | ', $item['loc']);
-                $loadVals = explode(' | ', $item['load']);
-                $loadStart = intval($loadVals[0]);
-                $loadEnd = intval($loadVals[1]);
-                $loadStartLoc = intval($loadLocs[0]);
-                $loadEndLoc = intval($loadLocs[1]);
+             // For distributed load, extract the start and end locations
+             $loadLocs = explode(' | ', $item['loc']);
+             $loadVals = explode(' | ', $item['load']);
+             $loadStart = intval($loadVals[0]);
+             $loadEnd = intval($loadVals[1]);
+             $loadStartLoc = intval($loadLocs[0]);
+             $loadEndLoc = intval($loadLocs[1]);
 
-                if ($x >= $loadStartLoc && $x <= $loadEndLoc) {
-                    $length = $loadEndLoc - $loadStartLoc;
-                    $shearForce += $loadStart + (($loadEnd - $loadStart) / $length) * ($x - $loadStartLoc);
-                }
-                break;
+             // Apply distributed load only within the range (loadStartLoc to loadEndLoc)
+             if ($x >= $loadStartLoc && $x <= $loadEndLoc) {
+                 $length = $loadEndLoc - $loadStartLoc;
+
+                 if ($length > 0) {
+                     // Use linear interpolation to calculate the load at point x
+                     $shearForce += $loadStart + (($loadEnd - $loadStart) / $length) * ($x - $loadStartLoc);
+                 } else {
+                     // Handle constant load over a small segment
+                     $shearForce += $loadStart;
+                 }
+             }
+             break;
         }
     }
 
@@ -405,34 +417,39 @@ header('Content-Type: application/json');
 
 // Return the response as a JSON object
 echo json_encode($response);
-// $hello='
-//   {  "1": {
-//         "type": "Length",
-//         "loc": "0 | 10",
-//         "load": ""
-//     },
-//     "2": {
-//         "type": "Support-pinned",
-//         "loc": "0",
-//         "load": ""
-//     },
-//     "3": {
-//         "type": "Support-fixed",
-//         "loc": "10",
-//         "load": ""
-//     },
+$hello='
+  {  "1": {
+        "type": "Length",
+        "loc": "0 | 10",
+        "load": ""
+    },
+    "2": {
+        "type": "Support-pinned",
+        "loc": "0",
+        "load": ""
+    },
+    "3": {
+        "type": "Support-fixed",
+        "loc": "10",
+        "load": ""
+    },
    
-//     "4": {
-//         "type": "Point Load",
-//         "loc": "5",
-//         "load": "25"
-//     },
-//     "5": {
-//         "loc": "m",
-//         "load": "kN"
-//     }
-// }
-// ';
+    "4": {
+        "type": "Point Load",
+        "loc": "5",
+        "load": "25"
+    },
+    "6": {
+        "type": "Dt. Load",
+        "loc": "1 | 10",
+        "load": "10 | 10"
+    },
+    "5": {
+        "loc": "m",
+        "load": "kN"
+    }
+}
+';
 
 // $reactions = [
 //     "va =" => 12.5,

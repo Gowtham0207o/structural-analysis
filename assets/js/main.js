@@ -478,6 +478,7 @@ function convert_section_unit(current_unit, properties_arr, new_unit){
 
 }
 
+
 function convert_section_unit_database(current_length_unit, length_text, section_length_text, section_stress_text){
 
 	change_elasticity();
@@ -2835,6 +2836,29 @@ function decode_html(html) {
 function check(){
 	console.log("Its working");
 }
+function subscribeNewsletter() {
+	let email = document.getElementById("newsletter1").value;
+  
+	fetch("subscribe.php", {
+	  method: "POST",
+	  headers: {
+		"Content-Type": "application/json"
+	  },
+	  body: JSON.stringify({ email: email })
+	})
+	.then(response => response.json())
+	.then(data => {
+	  let messageDiv = document.getElementById("message");
+	  if (data.success) {
+		messageDiv.innerHTML = "<div class='alert alert-success'>Subscription successful!</div>";
+	  } else {
+		messageDiv.innerHTML = "<div class='alert alert-danger'>Subscription failed. Please try again.</div>";
+	  }
+	})
+	.catch(error => {
+	  console.error("Error:", error);
+	});
+  }
 $(function () {
 	$('[data-toggle="tooltip"]').tooltip();
   });
